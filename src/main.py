@@ -1,0 +1,39 @@
+import os
+import sys
+
+# Inyectar el directorio raíz al path para que Python encuentre 'src'
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from dotenv import load_dotenv
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
+from src.bot_core import get_conversation_handler, baja_pieza, start, mensaje_desconocido
+
+def main():
+    # Cargar las variables desde el archivo .env (Token, IDs de Google)
+    load_dotenv()
+    TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+    
+    if not TOKEN or TOKEN == "AQUI_TU_TOKEN":
+        print("ERROR: No se ha configurado el Token de Telegram en .env", file=sys.stderr)
+        sys.exit(1)
+
+    print("Iniciando aplicacion de Telegram...")
+    # Crear el núcleo del bot
+    application = Application.builder().token(TOKEN).build()
+
+    # Comandos simples
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("baja", baja_pieza))
+    
+    # Flujo de registro paso a paso
+    application.add_handler(get_conversation_handler())
+
+    # Manejador para textos sueltos (como "Hola")
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, mensaje_desconocido))
+
+    # Dejar el bot encendido escuchando mensajes
+    print("Bot iniciado con exito! Escribele a tu bot en Telegram.")
+    application.run_polling()
+
+if __name__ == '__main__':
+    main()

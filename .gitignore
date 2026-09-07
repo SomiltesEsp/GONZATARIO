@@ -1,0 +1,11 @@
+# Ignorar archivos sensibles y de entorno
+credentials.json
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+env/
+
+API KEY/
+*.json

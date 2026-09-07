@@ -1,0 +1,8 @@
+# Reglas de GONZASaaS (Agent Guardrails)
+
+1. ESTADO DEL PROYECTO: Este es un proyecto de automatización para un taller de melaminas basado en Google Cloud (Project ID: gonzasaas).
+2. SINGLE SOURCE OF TRUTH: Antes de hacer cualquier cambio arquitectónico o dudar sobre la lógica de negocio, DEBES leer el archivo `SPEC.md` en la raíz de este proyecto.
+3. FILOSOFÍA: Usamos Spec-Driven Development. Los tests (arneses) en la carpeta `tests/` son sagrados. Si un cambio rompe los tests, revierte el cambio y analiza por qué falló.
+4. TECNOLOGÍAS: Python, python-telegram-bot, gspread, google-api-python-client, pytest.
+5. IDIOMA: Todos los mensajes de commit, documentación y respuestas al usuario deben ser en español. Variables y funciones en inglés o español según consistencia, pero priorizar legibilidad.
+
