@@ -28,7 +28,7 @@ def get_sheet():
 
 def generate_id():
     """Genera un código corto y único para la pieza, ej: M-A32"""
-    chars = string.ascii_uppercase + string.digits
+    chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789" # Sin I, O, 1, 0
     return "M-" + ''.join(random.choices(chars, k=3))
 
 def add_piece(medidas, color, foto_url):
@@ -52,13 +52,17 @@ def use_piece(piece_id):
     Retorna True si fue exitoso, False si no existe el ID.
     """
     sheet = get_sheet()
-    piece_id = piece_id.upper() # Para evitar errores de mayúsculas/minúsculas
+    piece_id = piece_id.upper() 
     try:
         # Buscar el piece_id en la columna 1 (A)
         cell = sheet.find(piece_id, in_column=1)
+        if cell is None:
+            return False
+            
         # Actualizar el estado en la columna 6 (F) a "USADO"
         sheet.update_cell(cell.row, 6, "USADO")
         return True
-    except gspread.exceptions.CellNotFound:
-        return False
-
+    except Exception as e:
+        if "CellNotFound" in str(type(e)):
+            return False
+        raise
