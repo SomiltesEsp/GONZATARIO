@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
-from src.bot_core import get_conversation_handler, baja_pieza, start, mensaje_desconocido
+from src.bot_core import get_conversation_handler, mensaje_desconocido
 
 def main():
     # Cargar las variables desde el archivo .env (Token, IDs de Google)
@@ -20,15 +20,11 @@ def main():
     print("Iniciando aplicacion de Telegram...")
     # Crear el núcleo del bot
     application = Application.builder().token(TOKEN).build()
-
-    # Comandos simples
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("baja", baja_pieza))
     
-    # Flujo de registro paso a paso
+    # Flujo de registro paso a paso (ahora contiene el menú principal)
     application.add_handler(get_conversation_handler())
 
-    # Manejador para textos sueltos (como "Hola")
+    # Manejador para textos sueltos (como mensajes que no activen el flujo)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, mensaje_desconocido))
 
     # Dejar el bot encendido escuchando mensajes

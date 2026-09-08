@@ -31,7 +31,7 @@ def generate_id():
     chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789" # Sin I, O, 1, 0
     return "M-" + ''.join(random.choices(chars, k=3))
 
-def add_piece(medidas, color, foto_url):
+def add_piece(medidas, color, grosor, veta, foto_url):
     """
     Añade una nueva pieza al inventario de Google Sheets.
     Devuelve el ID corto generado para que el operario lo anote.
@@ -40,8 +40,8 @@ def add_piece(medidas, color, foto_url):
     piece_id = generate_id()
     fecha = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # Orden de las columnas: ID, Fecha, Medidas, Color, Foto, Estado
-    row = [piece_id, fecha, medidas, color, foto_url, "DISPONIBLE"]
+    # Nuevo orden de las columnas: ID, Color, Grosor, Medidas, Veta, Foto, Estado, Date
+    row = [piece_id, color, grosor, medidas, veta, foto_url, "DISPONIBLE", fecha]
     sheet.append_row(row)
     
     return piece_id
@@ -59,8 +59,8 @@ def use_piece(piece_id):
         if cell is None:
             return False
             
-        # Actualizar el estado en la columna 6 (F) a "USADO"
-        sheet.update_cell(cell.row, 6, "USADO")
+        # Actualizar el estado en la columna 7 (G) a "USADO"
+        sheet.update_cell(cell.row, 7, "USADO")
         return True
     except Exception as e:
         if "CellNotFound" in str(type(e)):

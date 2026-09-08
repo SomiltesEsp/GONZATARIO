@@ -1,0 +1,7 @@
+- `[x]` Creación de carpeta `tests/` y archivos de test (`test_bot_core.py`, `test_storage.py`, `test_db_sheets.py`).
+- `[x]` Configuración de dependencias de prueba (`pytest`, `pytest-asyncio`, `pytest-mock`).
+- `[x]` Verificación de que todos los tests pasen exitosamente (12/12 passed).
+- `[x]` Creación de pipeline CI/CD en `.github/workflows/ci.yml`.
+- `[x]` Creación de archivo `Dockerfile` para empaquetado del entorno.
+- `[x]` Creación de script `cloudrun_deploy.sh` para despliegue automático a Cloud Run.
+- `[x]` Actualización del `README.md` y `SPEC.md` con las instrucciones de prueba y despliegue.

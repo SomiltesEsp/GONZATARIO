@@ -1,0 +1,33 @@
+name: GONZATARIO Bot CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Configurar Python 3.12
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.12"
+        
+    - name: Instalar dependencias
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        
+    - name: Ejecutar pruebas con pytest
+      env:
+        # Variables de entorno simuladas para evitar errores de carga
+        TELEGRAM_TOKEN: "fake-token"
+        SPREADSHEET_ID: "fake-id"
+        GCS_BUCKET_NAME: "fake-bucket"
+      run: |
+        pytest tests/ -v

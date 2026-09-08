@@ -13,20 +13,25 @@ Bot de Telegram para registrar entradas y salidas de piezas de melamina en un ta
 
 ## 3. Lógica de Negocio y Flujos (Máquina de Estados)
 
-### Flujo de Ingreso (`/nuevo`)
-1. **Estado 1 (Medidas):** El bot solicita las medidas. (Validación: debe contener números y la letra 'x', ej. 50x30).
-2. **Estado 2 (Color/Nombre):** El bot solicita el color o nombre descriptivo.
-3. **Estado 3 (Foto):** El bot solicita una foto. 
-4. **Procesamiento:** 
-   - El bot sube la foto a Google Drive (obtiene enlace público).
-   - El bot escribe en Google Sheets: `[ID Corto, Fecha, Medidas, Color, Link Foto, Estado: DISPONIBLE]`.
-5. **Cierre:** El bot devuelve el ID Corto (Ej: `M-12`) al operario para que lo anote físicamente en la pieza.
+### Flujo de Ingreso (Botones Interactivos)
+1. **Inicio (`Hola`, `GO` o `/start`):** El bot muestra un menú con botones interactivos `➕ Registrar Pieza` y `➖ Dar de Baja`.
+2. **Estado 1 (Medidas):** Si elige "Registrar", pide medidas (Ej. 50x30).
+3. **Estado 2 (Grosor):** Muestra teclado interactivo con medidas estándar (`3mm`, `6mm`, `10mm`, etc.) y la opción `Otro...`.
+4. **Estado 3 (Color/Nombre):** Solicita el color o diseño.
+5. **Estado 4 (Veta):** Solicita la dirección de la veta mediante botones (`A lo largo`, `A lo ancho`, `Sin veta`).
+6. **Estado 5 (Foto):** El bot solicita una foto de la pieza.
+7. **Procesamiento:** 
+   - Sube la foto a Google Cloud Storage (obtiene URL pública directa).
+   - Genera ID corto excluyendo letras confusas (I, O, 1, 0).
+   - Escribe en Google Sheets: `[ID Corto, Color, Grosor, Medidas, Veta, URL Foto, Estado: DISPONIBLE, Fecha]`.
+8. **Cierre:** El bot devuelve el ID Corto (Ej: `M-A32`) al operario para que lo anote físicamente en la pieza, y vuelve al menú.
 
-### Flujo de Salida (`/baja <ID>`)
-1. El usuario envía `/baja M-12`.
-2. El bot busca la fila con el ID `M-12`.
-3. Actualiza el estado a `USADO`.
-4. Confirma al usuario: "Pieza M-12 descontada del inventario".
+### Flujo de Salida (Dar de Baja)
+1. El usuario selecciona `➖ Dar de Baja` desde el menú principal.
+2. El bot pregunta por el ID corto de la pieza.
+3. El usuario envía el ID (Ej: `M-A32`).
+4. El bot busca la fila con el ID y actualiza el estado en la columna 7 (G) a `USADO`.
+5. Confirma al usuario el éxito o fracaso, y vuelve al menú principal.
 
 ## 4. Reglas de Spec-Driven Development
 * **Test-Driven:** Ningún cambio al código productivo (`src/`) se considera completo sin que los arneses de prueba (`tests/`) se ejecuten y pasen exitosamente.
