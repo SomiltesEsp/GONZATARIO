@@ -14,8 +14,15 @@ def upload_photo(file_path, file_name):
     if not GCS_BUCKET_NAME:
         raise ValueError("No se encontró GCS_BUCKET_NAME en el archivo .env")
     
+    import json
     # Autenticar usando el mismo JSON de credenciales
-    creds = Credentials.from_service_account_file('credentials.json')
+    creds_json_str = os.getenv("GOOGLE_CREDS_JSON")
+    if creds_json_str:
+        creds_info = json.loads(creds_json_str)
+        creds = Credentials.from_service_account_info(creds_info)
+    else:
+        creds = Credentials.from_service_account_file('credentials.json')
+    
     client = storage.Client(credentials=creds, project=creds.project_id)
     
     # Obtener el bucket

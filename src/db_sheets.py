@@ -15,14 +15,20 @@ SCOPES = [
     "https://www.googleapis.com/auth/drive"
 ]
 
+import json
+
 def get_sheet():
     """Autentica y devuelve el objeto de la hoja de cálculo principal."""
     if not SPREADSHEET_ID:
         raise ValueError("No se encontró SPREADSHEET_ID en el archivo .env")
         
-    creds = Credentials.from_service_account_file(
-        'credentials.json', scopes=SCOPES
-    )
+    creds_json_str = os.getenv("GOOGLE_CREDS_JSON")
+    if creds_json_str:
+        creds_info = json.loads(creds_json_str)
+        creds = Credentials.from_service_account_info(creds_info, scopes=SCOPES)
+    else:
+        creds = Credentials.from_service_account_file('credentials.json', scopes=SCOPES)
+        
     client = gspread.authorize(creds)
     return client.open_by_key(SPREADSHEET_ID).sheet1
 

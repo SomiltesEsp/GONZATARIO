@@ -1,14 +1,11 @@
 # Notas de Progreso y Traspaso (Handover)
 
-## Estado Actual (Interactivo)
-- **Migración a Menú Interactivo:** El bot dejó atrás los comandos `/nuevo` y `/baja`. Ahora funciona mediante botones interactivos, los cuales aparecen simplemente diciendo `Hola` o `GO`.
-- **Nuevo Estado VETA:** Se añadió un nuevo estado para registrar si la pieza tiene veta (`A lo largo`, `A lo ancho`, `Sin veta`).
-- **Grosor con Botones:** El usuario ya no necesita tipear el grosor estándar (3mm, 6mm, etc.), simplemente presiona un botón. Si necesita otro, puede presionar `Otro...` y escribirlo.
-- **Refactorización de Columnas:** Se ajustó `db_sheets.py` para mapear de la columna A a la H estrictamente: `ID, Color, Grosor, Medidas, Veta, Foto Ref, Estado, Date`.
-- **Cobertura de Pruebas (Testing):** Se actualizaron y pasaron exitosamente todos los tests (16/16) en `test_bot_core.py` y `test_db_sheets.py`, verificando toda la lógica de los botones interactivos, el estado VETA y la actualización correcta de la columna 7.
-- **Despliegue y CI/CD:** Ya están listos `Dockerfile`, `cloudrun_deploy.sh`, y `.github/workflows/ci.yml` para un futuro despliegue en Google Cloud Run.
-- **Repositorio:** Todos los cambios están respaldados en Git local y GitHub remoto de forma segura.
+## Estado Actual (Desplegado en Producción)
+- **Despliegue Exitoso en Google Cloud Run:** El bot fue migrado de Polling local a modo Webhook y está corriendo 100% de manera serverless en Google Cloud Run.
+- **Autenticación en la Nube:** Las credenciales de Google Service Account (`credentials.json`) ahora se inyectan dinámicamente como una variable de entorno (`GOOGLE_CREDS_JSON`) durante el despliegue para mantener la seguridad sin comprometer el código fuente en GitHub.
+- **Flujo Interactivo Completado:** El bot maneja eficientemente toda la inserción (Medidas, Grosor, Color, Veta, Foto) a través de un `ConversationHandler` y `ReplyKeyboardMarkup`.
+- **Integración con Sheets y Storage:** Las imágenes se suben al bucket `gonzasaas-fotos-inventario` y los datos se insertan con una URL pública en la columna "Foto Ref" en Google Sheets.
 
-## Siguientes Pasos
-1. **Despliegue Final en Cloud Run:** El usuario mencionó que el bot debería subirse a Cloud Run dentro del ecosistema de GonzaSaaS. Se requiere configurar Google Cloud Run con un servicio (y quizás migrar el bot a un modo Webhook si se desea escalar, aunque por ahora se puede subir como un contenedor corriendo en background).
-2. **Refinamiento Continuo:** Evaluar con los operarios del taller cómo se sienten utilizando el nuevo menú de botones interactivos para iterar y mejorar la experiencia.
+## Siguientes Pasos Pendientes (Backlog)
+1. **Seguridad por Clave de Acceso (Password):** A petición del usuario, se debe implementar una capa de seguridad para que el bot no atienda a extraños. El diseño acordado será mediante una **clave de acceso (password)**. Solo los usuarios que conozcan y digiten la clave por primera vez podrán continuar hablando y usando los botones del bot.
+2. **Uso Real:** El sistema arranca operaciones con datos reales el día de mañana. Monitorear el registro en Google Sheets para corroborar estabilidad.

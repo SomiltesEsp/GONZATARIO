@@ -27,9 +27,20 @@ def main():
     # Manejador para textos sueltos (como mensajes que no activen el flujo)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, mensaje_desconocido))
 
-    # Dejar el bot encendido escuchando mensajes
-    print("Bot iniciado con exito! Escribele a tu bot en Telegram.")
-    application.run_polling()
+    WEBHOOK_URL = os.getenv("WEBHOOK_URL")
+    PORT = int(os.getenv("PORT", "8080"))
+
+    if WEBHOOK_URL:
+        print(f"Modo Webhook activado. Escuchando en el puerto {PORT}")
+        application.run_webhook(
+            listen="0.0.0.0",
+            port=PORT,
+            url_path=TOKEN,
+            webhook_url=f"{WEBHOOK_URL}/{TOKEN}"
+        )
+    else:
+        print("Bot iniciado en modo Polling (Pruebas locales). Escríbele a tu bot en Telegram.")
+        application.run_polling()
 
 if __name__ == '__main__':
     main()

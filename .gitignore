@@ -9,3 +9,4 @@ env/
 
 API KEY/
 *.json
+env_vars.yaml
