@@ -7,8 +7,9 @@ Bot de Telegram para registrar entradas y salidas de piezas de melamina en un ta
 * **Cloud Provider:** Google Cloud Platform (GCP)
 * **Project ID:** `gonzasaas`
 * **Project Number:** `1060866881162`
+* **Servidor de Aplicación:** Google Cloud Run (Modo Webhook con Tornado)
 * **Base de Datos:** Google Sheets
-* **Almacenamiento de Fotos:** Google Drive
+* **Almacenamiento de Fotos:** Google Cloud Storage (Bucket: `gonzasaas-fotos-inventario`)
 * **Plataforma Bot:** Telegram (usando `python-telegram-bot`)
 
 ## 3. Lógica de Negocio y Flujos (Máquina de Estados)
