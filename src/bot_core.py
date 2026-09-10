@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
     
     # Común
     BAJA_ID
-) = range(17)
+) = range(15)
 
 # Teclados
 MATERIAL_KEYBOARD = [['🪵 Melamina', '🎞️ Canto']]
